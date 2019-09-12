@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>02 clock</title>
+
+    <style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+
+    html{
+        background: rgb(172, 104, 104) url(background.jpg) no-repeat;
+        background-size: cover;
+        font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+        text-align: center;
+    }
+    body{
+        font-size: 2rem;
+        min-height: 100vh;
+        display: flex;
+        flex: 1;
+        align-items: center;
+    }
+
+    .clock{
+        width: 30rem;
+        height: 30rem;
+        border-radius: 50%;
+        border: 20px solid rgba(250, 178, 176, 0.8);
+        margin: 50px auto;
+        /* position: relative; */
+        padding: 2rem;
+        background: rgba(0,0,0,.4);
+        box-shadow:
+                0 0 2px 4px rgba(0,0,0,.1),
+                /* inset 0 0 1px 2px #423b3b, */
+                /* inset 0 0 30px rgb(43, 37, 37), */
+                /* 0 0 10px 3px rgba(0,0,0,.2); */
+    }
+
+    .clock-face{
+        position: relative;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+    }
+
+    .clock-face::after{
+        width: 1em;
+        height: 1em;
+        left: 50%;
+        top: 50%;
+        position: absolute;
+        display: block;
+        content: '' ;
+        background-color: rgb(185, 123, 123);
+        border-radius: 50%;
+        box-shadow:
+                0 0 0 2px rgba(0,0,0,.1),
+                0 0 10px rgba(0,0,0,.2); 
+        transform: translate(-50%, -50%);
+        z-index: 15; 
+    }
+
+    .hand{
+        /* height: 10px; */
+        position: absolute;
+        color: #fff;
+        top: 50%;
+        right: 50%;
+        box-shadow: 
+                0 0 0 .1 #fff,
+                0 0 0 1px rgba(0,0,0,.1),
+                0 0 8px rgba(0,0,0,.4),
+                2px 5px 1px rgba(0,0,0,.4);
+        transform-origin: right;  /*也可用 100%*/
+        transform: rotate(90deg);
+
+        transition-timing-function: cubic-bezier(0.9, 0.54, 0.26, 1.68);
+    }
+    
+    .hour-hand{
+        width: 24%;
+        height: 10px;
+        border-top-left-radius: 30%;
+        border-bottom-left-radius: 30%;
+        z-index: 10;
+        background: white;
+        transition: all 3s;
+    }
+
+    .min-hand{
+        height: 6px;
+        width: 38%;
+        background: rgba(255, 255, 255, 0.8);
+        border-top-left-radius: 50%;
+        border-bottom-left-radius: 50%;
+        z-index: 11;
+        transition: all .1s cubic-bezier(0.9, 0.54, 0.26, 1.68);
+    }
+
+    .second-hand{
+        height: 4px;
+        width: 40%;
+        background: rgba(240, 148, 148, 0.9);
+        border-top-left-radius: 100%;
+        border-bottom-left-radius: 100%;
+        z-index: 12;
+        
+        transition:  all .05s cubic-bezier(0.9, 0。54, 0.26, 1.68);
+    }
+    </style>
+
+</head>
+<body>
+    <div class="clock">
+        <div class="clock-face">
+            <div class="hand hour-hand"></div>
+            <div class="hand min-hand"></div>
+            <div class="hand second-hand"></div>
+        </div>
+    </div>
+
+
+    <script>
+    //获取需要操作的元素
+    const oHour = document.querySelector('.hour-hand');
+    const oMin = document.querySelector('.min-hand');
+    const oSecond = document.querySelector('.second-hand');
+
+    // setTime();
+
+    // setInterval(function(){
+    //     setTime();
+    // }, 1000);  //直接跳转到当前时间
+
+    function setTime(){
+        //获取当前时间
+        const date = new Date();
+
+        //设置时针、分针、秒针转动的角度
+        const second = date.getSeconds();
+        const secondDeg = 90 + (second / 60) * 360;
+
+        const min = date.getMinutes();
+        const minDeg = 90 + (min / 60) * 360 + ((second / 60) / 60)*360;
+
+        const hour = date.getHours();
+        const hourDeg = 90 + (hour / 12) * 360 + ((min / 60) / 12)*360; //加入分钟所占的时间，使时针能缓慢移动
+
+        
+        oSecond.style.transform = `rotate(${ secondDeg }deg)`;
+        oMin.style.transform = `rotate(${ minDeg }deg)`;
+        oHour.style.transform = `rotate(${ hourDeg }deg)`; 
+
+        // console.log(`${hour}:${min}:${second} - ${hourDeg}:${minDeg}:${secondDeg} `);
+    }
+    
+    setInterval(setTime, 1000);
+
+    
+    // 解决指针跳帧问题的：
+    // 第一次加载时获取 Date 对象，
+    //	此后每秒更新角度值
+    let secondDeg = 0, minDeg = 0, hourDeg = 0;
+
+    function initTime(){
+        const date = new Date();
+
+        const second = date.getSeconds();
+		secondDeg = 90 + (second / 60) * 360;
+		const min = date.getMinutes();
+		minDeg = 90 + (min / 60) * 360 + ((second / 60) / 60) * 360;
+		const hour = date.getHours();
+		hourDeg = 90 + (hour / 12) * 360 + ((min / 60) / 12) * 360 + (((second / 60) / 60) / 12) * 360;
+    }
+    function updateDate(){
+        secondDeg += (1/60) * 360;
+        minDeg += ((1/60)/60) * 360;
+        hourDeg += (((1/60) /60 ) /12);
+        
+        secHand.style.transform = `rotate(${ s }deg)`;
+        minHand.style.transform = `rotate(${ m }deg)`;
+        hourHand.style.transform = `rotate(${ h }deg)`;
+    }
+    
+    </script>
+</body>
+</html>
