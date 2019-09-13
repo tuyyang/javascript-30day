@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>03-CSS variables</title>
+
+    <style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    
+    :root{
+        --spacing: 10px;
+        --blur: 5px;
+        --base: #8aa8af;
+    }
+
+    .h1{
+        color: var(--base);
+    }
+
+    img{
+        margin-top: 30px;
+        width: 200px;
+        height: 200px;
+        padding: var(--spacing);
+        filter: blur(var(--blur));
+        background: var(--base);
+    }
+
+    body{
+        text-align: center;
+        background: #193549;
+        color: white;
+        font-family: 'helvetica neue', 'sans-serif' ;
+        /* font-weight: 100; */
+        font-size: 22px;
+    } 
+
+    h1{
+        margin-top: 20px;
+    }
+    
+    .controls{
+        margin-bottom: 50px;
+        margin-top: 20px;
+    }
+
+    input{
+        width: 100px;
+    }
+
+    
+    </style>
+
+</head>
+<body>
+    <h1>Update CSS Variables with <span class="h1">JS</span></h1>
+
+    <div class="controls">
+        
+        <label for="spacing">Spacing:</label>
+        <input type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
+        
+        <label for="blur">Blur:</label>
+        <input type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
+
+        <label for="base">Base Color</label>
+        <input type="color" name="base" value="#8aa8af">
+    </div>
+
+    <div class="result">
+        img{
+            padding:<label id="code-spacing">10px</label>;
+            filter:blur(<label id="code-blur">10px</label>);
+            background:<label id="code-base">#8aa8af</label>;
+        }
+    </div>
+
+    <img src="03image.jpg" alt="img">
+
+    <!-- JS -->
+    <script>
+        const inputs = document.querySelectorAll('.controls input');
+
+        function handleUpdate(){
+            const suffix = this.dataset.sizing || ''; //根据data-sizing 获取参数的后缀 
+            document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix); 
+            document.getElementById(`code-${this.name}`).innerText = this.value + suffix;  //页面参数实时显示
+        }
+
+        inputs.forEach( input => input.addEventListener('change', handleUpdate));
+        inputs.forEach( input => addEventListener('mousemove', handleUpdate));
+
+        
+    </script>
+
+</body>
+</html>
