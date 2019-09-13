@@ -65,8 +65,9 @@
 
 ```js
 function handleUpdate(){
-	const suffix = this.dataset.sizing || ''; document.documentElement.style.setProperty(`--${this.name}`, 		this.value + suffix); 
-    document.getElementById(`code-${this.name}`).innerText = 			this.value + suffix;  //页面参数实时显示
+	const suffix = this.dataset.sizing || ''; 
+    document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix); 
+    document.getElementById(`code-${this.name}`).innerText = this.value + suffix;  //页面参数实时显示
 }
 ```
 
