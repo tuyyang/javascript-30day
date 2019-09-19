@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>09-面板调试技巧</title>
+
+</head>
+<body>
+    <p onclick="makePink()">♡点♡我♡吖♡</p>
+
+    <script>
+        const cats = [{
+            name: 'lulu',
+            age: 2
+        },{
+            name: '秋秋',
+            age: 1
+        }];
+
+        function makePink(){
+            const p = document.querySelector('p');
+            p.style.color = "rgb(218, 117, 117)";
+            p.style.fontSize = "66px";
+        }
+
+    // Regular
+    // 常规输出
+        console.log("逃离宿命也是你宿命的一部分");
+    
+    // Interpolated
+    // 字符替换
+        console.log("my name is %s", "log");
+        console.log("I'm %f years old", 17);
+        console.log('Hello I am a %s string!', '💩');
+
+    // Styled
+    // 设定输出的样式
+        console.log("%c 聪明的人看到我是蓝色的", "color: #BADA55; font-size: 2em;");
+            
+    // warning!
+        console.warn("warning! 我可警告你哦~")
+
+    // Error :|
+        console.error("error~别又来报错了！╭(╯^╰)╮");
+
+    // Info
+        console.info("Talk is cheap. Show me the code");
+
+    // Viewing DOM Elements
+    // 打印输出 DOM 元素
+        const p =document.querySelector('p');
+        console.log(p);
+        console.dir(p);
+    
+    // Testing
+        console.assert(1 === 1, "（五毛一条，括号内容记得删除）");
+        console.assert(1 === 0, "怎么肥四");
+        console.assert(p.innerHTML.match("兔洋"), "查无此人");
+
+    // clearing
+        // console.clear();
+
+    // Grouping together
+        cats.forEach(cat => {
+            console.group();
+            // console.groupCollapsed();  //收起列表
+            console.log(`${cat.name}`);
+            console.log(`${cat.age}`);
+            console.log(`${cat.name}有${cat.age}岁了`);
+            console.groupEnd();
+        });
+
+        console.table(cats);
+        console.table(cats, ["age"]);
+
+    // counting   
+        console.count("茶奶龙乌杯");
+        console.count("露甘枝杨杯");
+        console.count("露甘枝杨杯");
+        console.count("茶奶龙乌杯");
+        console.count("露甘枝杨杯");
+        console.count("露甘枝杨杯");
+        console.count("茶奶龙乌杯");
+        console.count("茶奶龙乌杯");
+      
+    //timing
+        console.time('fetch my data');
+        fetch("https://api.github.com/users/tuyyang")
+            .then(data => data.json())
+            .then(data => {
+                console.timeEnd('fetch my data');
+                console.log(data);
+            });
+    
+    </script>
+</body>
+</html>
