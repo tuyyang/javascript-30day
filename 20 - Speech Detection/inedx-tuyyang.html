@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Speech Detection</title>
+
+    <style>
+    html{
+        font-size: 10px;
+    }
+
+    body{
+        background: #ffc600;
+        font-family: 'helvetic neue';
+        font-weight: 200;
+        font-size: 20px;
+    }
+
+    .words{
+        max-width: 500px;
+        margin: 50px auto;
+        background-color: white;
+        border-radius: 5px;
+        box-shadow: 10px 10px 0 rgba(0,0,0,0.1);
+        padding: 1rem 2rem 1rem 5rem;
+        background: gradient(linear, 0, 0, 0 100%),
+            from(#d9eaf3), color-stop(4%, #fff) 0 4px;
+        background-size: 100% 3rem;
+        position: relative;
+        line-height: 3rem;
+    }
+
+    p{
+        margin: 0 0 3rem;
+    }
+
+    .words:before{
+        content:'';
+        position: absolute;
+        width: 4px;
+        top: 0;
+        left: 30px;
+        bottom: 0;
+        border: 1px solid;
+        border-color: transparent #efe4e4;
+    }
+    </style>
+</head>
+<body>
+    <div id="words" class="words" contenteditable=""></div>
+
+    <script>
+        window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        var words = document.getElementById('words');
+
+        //新建一个语音识别对象
+        const recognition = new SpeechRecognition();
+
+        //控制语音识别期间的结果是否返回，如开启了该属性，则一直返回
+        recognition.inerimResults = true;
+
+        //创建P标签，附加到DOM树
+        let p = document.createElement('p');
+        const words = document.querySelector('.words');
+        words.appendChild(p);
+
+       
+        //监听recognition的result事件，获取到语音输入的文字
+        //e.results中保存的是识别的结果。转换为数组方便使用map join等方法
+        recognition.addEventListener('result', (e) => {
+            const results = Array.from(e.results)
+                .map(results => result[0]) 
+                .map(results => result.transcript) //获取到没一段话
+                .join('');
+
+            //可以动态的将其中的一个词语替换
+            const poopScript = results.replace(/good/gi, '👍');
+            p.textContent = poopScript;
+
+            //当前输入结束，有停顿时，会新建一个p标签
+            if(e.results[0], isFinal) {
+                p = document.createElement('p');
+                words.appendChild(p);
+            }
+        } )
+
+        //监听recognition的end事件，当输入结束后，再次开始，保持输入状态
+        recognition.addEventListener('end'. recognition.start);
+
+        recognition.start();
+    </script>
+</body>
+</html>
